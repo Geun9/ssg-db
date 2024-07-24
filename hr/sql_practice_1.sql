@@ -166,10 +166,10 @@ FROM employees;
 -- 계산된 출력값은 6자리와 세 자리 구분기호, $ 표시와 함께 출력하고 부서번호의 오름차순 정렬하시오.
 -- 단, 부서에 소속되지 않은 사원에 대한 정보는 제외하고 출력시 머리글은 아래 예시처럼 별칭(alias) 처리 하시오.
 SELECT department_id
-     , concat('$', LPAD(format(SUM(salary), 2), 10, ' ')) AS sumSalary
-     , concat('$', LPAD(format(AVG(salary), 2), 10, ' ')) AS avgSalary
-     , concat('$', LPAD(format(MAX(salary), 2), 10, ' ')) AS maxSalary
-     , concat('$', LPAD(format(MIN(salary), 2), 10, ' ')) AS minSalary
+     , CONCAT('$', LPAD(FORMAT(SUM(salary), 2), 10, ' ')) AS sumSalary
+     , CONCAT('$', LPAD(FORMAT(AVG(salary), 2), 10, ' ')) AS avgSalary
+     , CONCAT('$', LPAD(FORMAT(MAX(salary), 2), 10, ' ')) AS maxSalary
+     , CONCAT('$', LPAD(FORMAT(MIN(salary), 2), 10, ' ')) AS minSalary
 FROM employees
 WHERE department_id IS NOT NULL
 GROUP BY department_id
@@ -180,7 +180,7 @@ ORDER BY department_id;
 -- 사원들의 업무별 전체 급여 평균이 $10,000보다 큰 경우를 조회하여 업무, 급여 평균을 출력하시오.
 -- 단 업무에 사원(CLERK)이 포함된 경우는 제외하고 전체 급여 평균이 높은 순서대로 출력하시오.
 SELECT job_id
-, AVG(salary) AS avgSalary
+     , AVG(salary) AS avgSalary
 FROM employees
 WHERE NOT job_id LIKE '%CLERK%'
 GROUP BY job_id
