@@ -74,19 +74,10 @@ WHERE se.employee_id = ?;
 -- 9. 모든 사원의 이름, 업무,부서이름, 급여 , 급여등급을 조회하세요
 SELECT CONCAT(e.first_name, ' ', e.last_name) AS Name
      , e.job_id
-     , d.department_id
      , d.department_name
-     , (CASE
-            WHEN e.salary BETWEEN 1000 AND 2999 THEN 'A'
-            WHEN e.salary BETWEEN 3000 AND 5999 THEN 'B'
-            WHEN e.salary BETWEEN 6000 AND 9999 THEN 'C'
-            WHEN e.salary BETWEEN 10000 AND 14999 THEN 'D'
-            WHEN e.salary BETWEEN 15000 AND 24999 THEN 'E'
-            WHEN e.salary BETWEEN 25000 AND 40000 THEN 'F'
-            ELSE '-'
-    END)                                      AS grade_level
-FROM employees e
-         LEFT JOIN departments d ON e.department_id = d.department_id;
-
-SELECT *
-FROM job_grades;
+     , e.salary
+     , jg.grade_level
+FROM employees e,
+     job_grades jg,
+     departments d
+WHERE e.department_id = d.department_id AND e.salary BETWEEN jg.lowest_sal AND jg.highest_sal;
