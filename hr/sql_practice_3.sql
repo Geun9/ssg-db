@@ -41,17 +41,17 @@ ORDER BY employeeCnt DESC;
 -- 급여 등급은 JOB_GRADES 테이블에 표시 된다.
 -- 해당 테이블의 구조를 살펴본 후 사원의 성과 이름(Name으로 별칭), 업무,
 -- 부서명, 입사일, 급여, 급여등급을 출력하시오.
-SELECT CONCAT(e.first_name, ' ', e.last_name) AS Name
+SELECT CONCAT(e.first_name, ' ', e.last_name)                    AS Name
      , e.job_id
      , d.department_name
      , e.hire_date
      , e.salary
-     , jg.grade_level
+     , (SELECT jg.grade_level
+        FROM job_grades jg
+        WHERE e.salary BETWEEN jg.lowest_sal AND jg.highest_sal) AS grade_level
 FROM employees e,
-     job_grades jg,
      departments d
-WHERE e.department_id = d.department_id
-  AND e.salary BETWEEN jg.lowest_sal AND jg.highest_sal;
+WHERE e.department_id = d.department_id;
 
 
 -- [문제 3]
@@ -61,8 +61,9 @@ WHERE e.department_id = d.department_id
 -- 단, 보고할 상사가 없는 사원이 있다면 그 정보도 포함하여 출력하고, 상사의 이름은 대문자로 출력하시오.
 
 SELECT IF(e.manager_id IS NOT NULL,
-           CONCAT(e.first_name, ' ', e.last_name, ' report to ', UPPER(m.first_name), ' ', UPPER(m.last_name)),
-           CONCAT(e.first_name, ' ', e.last_name, ' report to ')
+          CONCAT(e.first_name, ' ', e.last_name, ' report to ', UPPER(m.first_name), ' ', UPPER(m.last_name)),
+          CONCAT(e.first_name, ' ', e.last_name, ' report to ')
        ) AS 'Report To'
 FROM employees e
-LEFT JOIN employees m ON e.manager_id = m.employee_id;
+         LEFT JOIN employees m ON e.manager_id = m.employee_id;
+
