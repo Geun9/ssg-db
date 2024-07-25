@@ -41,17 +41,15 @@ ORDER BY employeeCnt DESC;
 -- 급여 등급은 JOB_GRADES 테이블에 표시 된다.
 -- 해당 테이블의 구조를 살펴본 후 사원의 성과 이름(Name으로 별칭), 업무,
 -- 부서명, 입사일, 급여, 급여등급을 출력하시오.
-SELECT CONCAT(e.first_name, ' ', e.last_name)                    AS Name
+SELECT CONCAT(e.first_name, ' ', e.last_name) AS Name
      , e.job_id
      , d.department_name
      , e.hire_date
      , e.salary
-     , (SELECT jg.grade_level
-        FROM job_grades jg
-        WHERE e.salary BETWEEN jg.lowest_sal AND jg.highest_sal) AS grade_level
-FROM employees e,
-     departments d
-WHERE e.department_id = d.department_id;
+     , jg.grade_level
+FROM employees e
+         JOIN departments d ON e.department_id = d.department_id
+         LEFT JOIN job_grades jg ON e.salary BETWEEN jg.lowest_sal AND jg.highest_sal;
 
 
 -- [문제 3]
