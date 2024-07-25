@@ -79,7 +79,6 @@ SELECT CONCAT(e.first_name, ' ', e.last_name) AS Name
      , d.department_name
      , e.salary
      , jg.grade_level
-FROM employees e,
-     job_grades jg,
-     departments d
-WHERE e.department_id = d.department_id AND e.salary BETWEEN jg.lowest_sal AND jg.highest_sal;
+FROM employees e
+         JOIN departments d ON e.department_id = d.department_id
+         LEFT JOIN job_grades jg ON e.salary BETWEEN jg.lowest_sal AND jg.highest_sal;
