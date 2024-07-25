@@ -1,3 +1,5 @@
+USE hr;
+
 -- 1. 모든 사원의 이름, 부서번호, 부서 이름을 조회하세요
 SELECT CONCAT(e.first_name, ' ', e.last_name) AS Name
      , e.department_id
@@ -34,7 +36,7 @@ FROM employees e
 SELECT DISTINCT e.first_name
 FROM employees e,
      departments d
-WHERE REGEXP_LIKE(e.first_name, 'A', 'c');
+WHERE REGEXP_LIKE(e.first_name, 'a', 'c');
 
 
 -- 5. 'Toronto'에서 근무하는 모든 사원의 이름, 업무, 부서 번호 와 부서명을 조회하세요
