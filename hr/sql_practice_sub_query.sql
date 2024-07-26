@@ -147,22 +147,16 @@ HAVING MIN(e.salary) > ANY (SELECT MIN(salary)
 SELECT CONCAT(e.first_name, ' ', e.last_name) AS Name
      , e.job_id
      , d.department_name
-     , l.street_address
-FROM employees e
-         JOIN departments d ON e.department_id = d.department_id
-         JOIN locations l ON l.location_id = d.location_id
-WHERE job_id = (SELECT job_id
-                FROM jobs
-                WHERE job_id = 'SA_MAN');
-
-SELECT e.Name
-     , e.job_id
-FROM locations l
-         JOIN hr.departments d ON l.location_id = d.location_id
-         JOIN (SELECT CONCAT(first_name, ' ', last_name) AS Name
-                    , job_id
-                    , department_id
-               FROM employees) e ON d.department_id = e.department_id;
+     , l.city
+FROM (SELECT first_name, last_name, job_id, department_id
+      FROM employees
+      WHERE job_id = 'SA_MAN') e,
+     (SELECT department_id, department_name, location_id
+      FROM departments) d,
+     (SELECT location_id, city
+      FROM locations) l
+WHERE e.department_id = d.department_id
+  AND d.location_id = l.location_id;
 
 
 -- [문제 12]
