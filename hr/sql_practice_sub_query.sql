@@ -58,11 +58,15 @@ SELECT e.employee_id
      , e.job_id
      , e.hire_date
      , l.city
+     , d.department_id
 FROM employees e
          JOIN departments d ON e.department_id = d.department_id
-         JOIN locations l ON l.location_id IN (SELECT location_id
-                                               FROM locations
-                                               WHERE BINARY (city) LIKE 'O%');
+         JOIN locations l ON l.location_id = d.location_id
+WHERE e.department_id = (SELECT d2.department_id
+                         FROM departments d2
+                         WHERE d2.location_id = (SELECT l2.location_id
+                                                 FROM locations l2
+                                                 WHERE BINARY (l2.city) LIKE 'O%'));
 
 
 -- [문제 5]
@@ -165,7 +169,12 @@ FROM locations l
 -- 가장 많은 부하직원을 갖는 MANAGER의 사원번호와 이름을 출력하시오
 SELECT e.employee_id
      , CONCAT(e.first_name, ' ', e.last_name) AS Name
-FROM employees e;
+FROM employees e
+WHERE e.employee_id = (SELECT manager_id
+                       FROM employees
+                       GROUP BY manager_id
+                       ORDER BY COUNT(manager_id) DESC
+                       LIMIT 1);
 
 -- [문제 13]
 -- 사원번호가 123인 사원의 업무가 같고 사원번호가 192인 사원의 급여(SAL))보다 많은 사원의 사원번호,이름,직업,급여를 출력하시오
