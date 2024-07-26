@@ -18,8 +18,11 @@ SELECT CONCAT(e.first_name, ' ', e.last_name) AS Name
      , e.salary
      , e.hire_date
 FROM employees e
-WHERE salary = (SELECT MIN(salary)
-                FROM employees);
+         JOIN (SELECT MIN(salary) salary
+                    , job_id
+               FROM employees
+               GROUP BY job_id) AS j ON e.job_id = j.job_id
+    AND e.salary = j.salary;
 
 
 -- [문제 3]
@@ -192,7 +195,7 @@ FROM employees e
 WHERE salary > ANY (SELECT salary
                     FROM employees
                     WHERE department_id = 50)
-AND e.department_id != 50;
+  AND e.department_id != 50;
 
 
 -- [문제 15]
