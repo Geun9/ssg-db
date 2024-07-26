@@ -33,8 +33,9 @@ SELECT CONCAT(e.first_name, ' ', e.last_name) AS Name
      , e.department_id
      , e.job_id
 FROM employees e
-WHERE salary > (SELECT AVG(salary)
-                FROM employees);
+WHERE e.salary > ANY (SELECT AVG(salary) salaryAvg
+                      FROM employees
+                      GROUP BY department_id);
 
 
 -- [문제 4]
